@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OUDH & ROSE — Pure Natural Attar House</title>
+<meta name="description" content="Artisanal hydro-distilled attar: pure Damask rose, aged Assam agarwood, and Mysore sandalwood. 100% natural botanical oil with zero alcohol.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js"></script>
+<style>
+  :root {
+    --bg: #050505;
+    --bg-elevated: #0d0c0a;
+    --bg-card: rgba(18, 16, 14, 0.72);
+    --brass: #d4a359;
+    --brass-bright: #f4d38c;
+    --brass-glow: rgba(212, 163, 89, 0.25);
+    --rose: #9c324a;
+    --rose-bright: #d45976;
+    --rose-glow: rgba(156, 50, 74, 0.3);
+    --text: #f7f3ec;
+    --text-dim: rgba(247, 243, 236, 0.65);
+    --border: rgba(212, 163, 89, 0.18);
+    --border-dim: rgba(247, 243, 236, 0.08);
+  }
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { background: var(--bg); color: var(--text); }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    line-height: 1.65;
+  }
+  
+  h1, h2, h3, h4, .brand-font {
+    font-family: "Cinzel", Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── 35mm Analog Film Grain Overlay ── */
+  .film-grain {
+    position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  /* ── Loader ── */
+  #loader {
+    position: fixed; inset: 0; z-index: 200;
+    background: var(--bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 24px;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  #loader.done { opacity: 0; pointer-events: none; visibility: hidden; }
+  #loader .mark {
+    font-family: "Cinzel", serif;
+    font-size: 20px; letter-spacing: 0.45em; text-indent: 0.45em;
+    color: var(--brass-bright); text-transform: uppercase; font-weight: 600;
+  }
+  #loader .sub {
+    font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--text-dim); margin-top: -14px;
+  }
+  #loader .bar {
+    width: 220px; height: 2px; background: rgba(212, 163, 89, 0.15);
+    overflow: hidden; position: relative; border-radius: 2px;
+  }
+  #loader .bar i {
+    position: absolute; left: 0; top: 0; bottom: 0; width: 0%;
+    background: linear-gradient(90deg, var(--rose), var(--brass), var(--brass-bright));
+    display: block;
+    transition: width 0.25s ease;
+  }
+
+  /* ── Sticky Nav ── */
+  #brandnav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 5vw;
+    background: rgba(5, 5, 5, 0.85);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border-dim);
+    opacity: 0; pointer-events: none; transform: translateY(-10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  #brandnav.on { opacity: 1; pointer-events: auto; transform: none; }
+  #brandnav .mark {
+    font-family: "Cinzel", serif;
+    letter-spacing: 0.3em; text-indent: 0.3em;
+    font-size: 14px; color: var(--brass-bright); text-transform: uppercase; font-weight: 600;
+  }
+  #brandnav .links { display: flex; gap: 2.2vw; align-items: center; }
+  #brandnav a {
+    color: var(--text-dim); text-decoration: none; font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500;
+    transition: color 0.25s;
+  }
+  #brandnav a:hover { color: var(--brass-bright); }
+  #brandnav .navcta {
+    border: 1px solid var(--brass);
+    border-radius: 100px;
+    padding: 8px 20px;
+    color: var(--brass-bright) !important;
+    background: rgba(212, 163, 89, 0.08);
+    transition: all 0.3s ease;
+  }
+  #brandnav .navcta:hover {
+    background: var(--brass);
+    color: #050505 !important;
+    box-shadow: 0 0 16px var(--brass-glow);
+  }
+
+  /* ── Audio Switcher ── */
+  .sound-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(212, 163, 89, 0.08);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 14px;
+    color: var(--text-dim);
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s ease;
+  }
+  .sound-btn:hover, .sound-btn.active {
+    border-color: var(--brass);
+    color: var(--brass-bright);
+    background: rgba(212, 163, 89, 0.16);
+  }
+  .sound-btn .wave-icon {
+    display: inline-flex; gap: 2px; align-items: center; height: 10px;
+  }
+  .sound-btn .wave-icon span {
+    width: 2px; height: 4px; background: currentColor; border-radius: 1px;
+    transition: height 0.2s ease;
+  }
+  .sound-btn.active .wave-icon span:nth-child(1) { animation: wave 1s infinite 0.1s; }
+  .sound-btn.active .wave-icon span:nth-child(2) { animation: wave 1s infinite 0.3s; }
+  .sound-btn.active .wave-icon span:nth-child(3) { animation: wave 1s infinite 0.2s; }
+  @keyframes wave {
+    0%, 100% { height: 3px; }
+    50% { height: 10px; }
+  }
+
+  /* ── Vertical Chapter HUD ── */
+  #chapter-hud {
+    position: fixed; right: 28px; top: 50%; transform: translateY(-50%);
+    z-index: 90; display: flex; flex-direction: column; align-items: center; gap: 14px;
+    transition: opacity 0.4s ease;
+  }
+  .hud-rail {
+    position: absolute; top: 0; bottom: 0; width: 1px;
+    background: rgba(255, 255, 255, 0.1); z-index: 1;
+  }
+  .hud-rail-progress {
+    position: absolute; top: 0; left: 0; width: 100%; height: 0%;
+    background: var(--brass); z-index: 2; transition: height 0.1s ease;
+  }
+  .hud-dot {
+    position: relative; z-index: 3;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #181614; border: 1px solid rgba(212, 163, 89, 0.4);
+    cursor: pointer; transition: all 0.3s ease;
+  }
+  .hud-dot:hover {
+    transform: scale(1.4);
+    border-color: var(--brass-bright);
+    background: var(--brass);
+    box-shadow: 0 0 10px var(--brass-bright);
+  }
+  .hud-dot.active {
+    background: var(--brass-bright);
+    border-color: var(--brass-bright);
+    transform: scale(1.3);
+    box-shadow: 0 0 12px var(--brass-glow);
+  }
+  .hud-dot .hud-label {
+    position: absolute; right: 22px; top: 50%; transform: translateY(-50%);
+    background: rgba(13, 12, 10, 0.9);
+    border: 1px solid var(--border);
+    padding: 3px 10px; border-radius: 4px;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--text); white-space: nowrap; pointer-events: none;
+    opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .hud-dot:hover .hud-label {
+    opacity: 1; transform: translateY(-50%) translateX(-4px);
+  }
+
+  @media (max-width: 900px) {
+    #chapter-hud { display: none; }
+  }
+
+  /* ── Scroll Stage ── */
+  #track { height: 950vh; position: relative; }
+  #stage {
+    position: sticky; top: 0; height: 100vh; width: 100%;
+    overflow: hidden; background: var(--bg);
+  }
+  #film {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    display: block;
+  }
+  #vignette {
+    position: absolute; inset: 0; z-index: 5; pointer-events: none;
+    background:
+      radial-gradient(ellipse 65% 75% at 50% 50%, transparent 48%, rgba(5, 5, 5, 0.88) 96%),
+      linear-gradient(to right, rgba(5, 5, 5, 0.95), transparent 15%, transparent 85%, rgba(5, 5, 5, 0.95)),
+      linear-gradient(to bottom, rgba(5, 5, 5, 0.85) 0%, transparent 12%, transparent 88%, rgba(5, 5, 5, 0.95) 100%);
+  }
+
+  /* Top Right Floating Sound Toggle */
+  .top-sound-ctrl {
+    position: fixed; top: 22px; right: 28px; z-index: 110;
+  }
+
+  /* ── Captions ── */
+  .caption {
+    position: absolute; z-index: 10;
+    opacity: 0; pointer-events: none;
+    will-change: opacity, transform;
+    max-width: 90vw;
+  }
+  
+  .caption .step-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--brass); font-weight: 600; margin-bottom: 12px;
+    padding: 4px 14px; border-radius: 100px;
+    background: rgba(212, 163, 89, 0.1);
+    border: 1px solid rgba(212, 163, 89, 0.25);
+    backdrop-filter: blur(8px);
+  }
+  
+  .caption h1 {
+    font-size: clamp(40px, 6.8vw, 90px);
+    font-weight: 600; letter-spacing: -0.02em; line-height: 1.04;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8);
+  }
+  .caption h2 {
+    font-size: clamp(28px, 4vw, 56px);
+    font-weight: 600; letter-spacing: -0.015em; line-height: 1.08;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+  }
+  .caption p {
+    margin-top: 14px;
+    font-size: clamp(14px, 1.3vw, 19px);
+    color: var(--text-dim); font-weight: 400; line-height: 1.65;
+    max-width: 40ch;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+  }
+  .caption .brass { color: var(--brass-bright); }
+  .caption .rose { color: var(--rose-bright); }
+
+  .cap-center { left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; }
+  .cap-center p { margin-left: auto; margin-right: auto; }
+  .cap-left { left: 7vw; top: 50%; transform: translateY(-50%); text-align: left; }
+  .cap-right { right: 7vw; top: 50%; transform: translateY(-50%); text-align: right; }
+  .cap-right p { margin-left: auto; }
+  .cap-bottom { left: 50%; bottom: 10vh; transform: translateX(-50%); text-align: center; }
+  .cap-bottom p { margin-left: auto; margin-right: auto; }
+
+  @media (max-width: 768px) {
+    .cap-left, .cap-right { left: 5vw; right: 5vw; top: 50%; text-align: center; }
+    .cap-right p, .cap-left p { margin-left: auto; margin-right: auto; }
+  }
+
+  #scroll-cue {
+    position: absolute; bottom: 4vh; left: 50%; transform: translateX(-50%);
+    z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: var(--text-dim); font-size: 11px; letter-spacing: 0.35em; text-indent: 0.35em;
+    text-transform: uppercase;
+    transition: opacity 0.5s ease;
+  }
+  #scroll-cue::after {
+    content: ""; width: 1px; height: 32px;
+    background: linear-gradient(to bottom, var(--brass), transparent);
+    animation: cue 1.8s ease-in-out infinite;
+  }
+  @keyframes cue {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(8px); opacity: 0.3; }
+  }
+
+  /* ── Buttons & CTAs ── */
+  .cta-btn {
+    margin-top: 24px; pointer-events: auto;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 15px 36px;
+    border: 1px solid var(--brass);
+    border-radius: 100px;
+    background: rgba(212, 163, 89, 0.1);
+    color: var(--brass-bright); text-decoration: none;
+    font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 600;
+    transition: all 0.35s ease;
+    backdrop-filter: blur(10px);
+  }
+  .cta-btn:hover {
+    background: var(--brass);
+    color: #050505;
+    box-shadow: 0 0 24px var(--brass-glow);
+    transform: translateY(-2px);
+  }
+
+  /* ── Brand Sections ── */
+  .bp { position: relative; padding: 14vh 6vw; max-width: 1400px; margin: 0 auto; }
+  .bp .kicker {
+    font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--brass); margin-bottom: 16px; font-weight: 600;
+  }
+  .bp h2 {
+    font-weight: 600; letter-spacing: -0.02em; line-height: 1.1;
+    font-size: clamp(32px, 4.2vw, 62px); margin-bottom: 20px;
+  }
+  .bp p.lead {
+    color: var(--text-dim); font-size: clamp(15px, 1.25vw, 18px);
+    line-height: 1.8; max-width: 48ch;
+  }
+
+  [data-reveal] {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.8s cubic-bezier(.2,.6,.2,1), transform 0.8s cubic-bezier(.2,.6,.2,1);
+  }
+  [data-reveal].in { opacity: 1; transform: none; }
+
+  /* Manifesto */
+  .bp-manifesto { text-align: center; padding: 22vh 6vw 16vh; }
+  .bp-manifesto h2 {
+    font-size: clamp(38px, 6vw, 92px); max-width: 18ch; margin: 0 auto 24px;
+    line-height: 1.08; color: var(--text);
+  }
+  .bp-manifesto p.lead { margin: 0 auto; max-width: 58ch; text-align: center; }
+
+  /* Process Cards Grid */
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 28px;
+    margin-top: 50px;
+  }
+  @media (max-width: 450px) {
+    .process-grid { grid-template-columns: 1fr; }
+  }
+  .process-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 34px 30px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .process-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--brass);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 20px var(--brass-glow);
+  }
+  .process-card .step-num {
+    font-family: "Cinzel", serif;
+    font-size: 32px; font-weight: 700; color: var(--brass);
+    line-height: 1; margin-bottom: 14px;
+    opacity: 0.9;
+  }
+  .process-card h3 {
+    font-size: 20px; font-weight: 600; margin-bottom: 12px;
+    color: var(--text); letter-spacing: 0.01em;
+  }
+  .process-card p {
+    font-size: 14px; color: var(--text-dim); line-height: 1.7;
+  }
+  .process-card .tag-row {
+    margin-top: 18px; padding-top: 14px;
+    border-top: 1px solid var(--border-dim);
+    display: flex; gap: 12px; font-size: 11px;
+    letter-spacing: 0.15em; text-transform: uppercase; color: var(--brass-bright);
+  }
+
+  /* ── Olfactory Pyramid ── */
+  .notes-pyramid {
+    display: flex; flex-direction: column; gap: 20px; margin-top: 50px; max-width: 1000px; margin-left: auto; margin-right: auto;
+  }
+  .accord-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    display: grid; grid-template-columns: 200px 1fr; gap: 30px; align-items: center;
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+  }
+  .accord-card:hover {
+    border-color: var(--brass);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 16px var(--brass-glow);
+  }
+  .accord-header h4 {
+    font-size: 18px; color: var(--brass-bright); margin-bottom: 6px;
+  }
+  .accord-header .timeframe {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim);
+  }
+  .accord-pills {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;
+  }
+  .accord-pill {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 100px;
+    background: rgba(212, 163, 89, 0.08); border: 1px solid var(--border);
+    color: var(--text);
+  }
+  @media (max-width: 768px) {
+    .accord-card { grid-template-columns: 1fr; gap: 14px; }
+  }
+
+  /* ── Attar vs Spray Comparison ── */
+  .comp-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    margin-top: 40px; border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+  }
+  .comp-table th, .comp-table td {
+    padding: 20px 24px; text-align: left;
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .comp-table th {
+    font-family: "Cinzel", serif; font-size: 14px; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--brass); background: rgba(13, 12, 10, 0.9);
+  }
+  .comp-table th.highlight, .comp-table td.highlight {
+    background: rgba(212, 163, 89, 0.05); color: var(--brass-bright); font-weight: 600;
+  }
+  .comp-table td { font-size: 14px; color: var(--text-dim); }
+  .comp-table tr:last-child td { border-bottom: none; }
+  @media (max-width: 650px) {
+    .comp-table th, .comp-table td { padding: 14px 12px; font-size: 12px; }
+  }
+
+  /* Split sections */
+  .bp-split { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; align-items: center; }
+  .bp-split.flip > :first-child { order: 2; }
+  .bp-split .img-box { position: relative; border-radius: 10px; overflow: hidden; }
+  .bp-split img {
+    width: 100%; height: auto; display: block; border-radius: 8px;
+    -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 65%, transparent 100%);
+    mask-image: radial-gradient(ellipse 90% 90% at 50% 50%, black 65%, transparent 100%);
+    border: 1px solid var(--border-dim);
+  }
+  @media (max-width: 850px) {
+    .bp-split { grid-template-columns: 1fr; }
+    .bp-split.flip > :first-child { order: 0; }
+  }
+
+  /* Stats strip */
+  .bp-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3vw;
+    text-align: center;
+    padding: 8vh 4vw;
+    background: rgba(13, 12, 11, 0.6);
+    border-top: 1px solid var(--border-dim);
+    border-bottom: 1px solid var(--border-dim);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+  }
+  @media (max-width: 768px) {
+    .bp-stats { grid-template-columns: repeat(2, 1fr); gap: 6vw; }
+  }
+  .bp-stats .num {
+    font-family: "Cinzel", serif;
+    font-weight: 700; letter-spacing: -0.02em;
+    font-size: clamp(36px, 4.5vw, 64px);
+    color: var(--brass-bright);
+  }
+  .bp-stats .lbl {
+    margin-top: 6px; font-size: 11px;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--text-dim); font-weight: 500;
+  }
+
+  /* Specs Table */
+  .bp-specs table { width: 100%; max-width: 850px; margin: 30px auto 0; border-collapse: collapse; }
+  .bp-specs td {
+    padding: 18px 12px;
+    border-bottom: 1px solid var(--border-dim);
+    font-size: clamp(13px, 1.2vw, 15px);
+  }
+  .bp-specs td:first-child {
+    color: var(--brass); letter-spacing: 0.15em; text-transform: uppercase;
+    font-size: 11px; font-weight: 600; width: 40%;
+  }
+  .bp-specs td:last-child {
+    text-align: right; color: var(--text); font-weight: 400;
+  }
+
+  /* Pull Quote */
+  .bp-quote { text-align: center; max-width: 44ch; margin: 0 auto; padding: 18vh 6vw; }
+  .bp-quote blockquote {
+    font-family: "Cinzel", serif;
+    font-size: clamp(22px, 2.6vw, 36px);
+    font-weight: 500; letter-spacing: -0.01em; line-height: 1.35;
+    color: var(--text);
+  }
+  .bp-quote cite {
+    display: block; margin-top: 26px; font-style: normal;
+    font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--brass); font-weight: 600;
+  }
+
+  /* Gallery */
+  .bp-gallery { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; margin-top: 30px; }
+  .bp-gallery .img-wrap {
+    overflow: hidden; border-radius: 8px; border: 1px solid var(--border-dim);
+    background: var(--bg-elevated);
+  }
+  .bp-gallery img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.6s ease, filter 0.6s ease;
+    filter: brightness(0.92);
+  }
+  .bp-gallery img:hover { transform: scale(1.03); filter: brightness(1); }
+  .bp-gallery .g1 { grid-column: span 7; aspect-ratio: 16/10; }
+  .bp-gallery .g2 { grid-column: span 5; aspect-ratio: 4/5; }
+  .bp-gallery .g3 { grid-column: span 5; aspect-ratio: 1/1; }
+  .bp-gallery .g4 { grid-column: span 7; aspect-ratio: 16/10; }
+  @media (max-width: 800px) {
+    .bp-gallery .img-wrap { grid-column: span 12 !important; aspect-ratio: 16/10 !important; }
+  }
+
+  /* ── Interactive Flacon Selector ── */
+  .flacon-selector {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    max-width: 950px; margin: 40px auto 0; text-align: left;
+  }
+  .flacon-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 28px 24px;
+    cursor: pointer; transition: all 0.3s ease;
+    position: relative;
+  }
+  .flacon-card:hover {
+    border-color: var(--brass);
+    transform: translateY(-4px);
+  }
+  .flacon-card.selected {
+    border-color: var(--brass-bright);
+    background: rgba(212, 163, 89, 0.1);
+    box-shadow: 0 0 24px var(--brass-glow);
+  }
+  .flacon-card .size-tag {
+    font-family: "Cinzel", serif; font-size: 24px; color: var(--brass-bright); font-weight: 700;
+  }
+  .flacon-card .price {
+    font-size: 18px; color: var(--text); margin-top: 4px; font-weight: 600;
+  }
+  .flacon-card .desc {
+    font-size: 12px; color: var(--text-dim); margin-top: 10px; line-height: 1.6;
+  }
+  .engrave-box {
+    max-width: 500px; margin: 30px auto 0;
+    display: flex; gap: 12px; justify-content: center;
+  }
+  .engrave-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 18px;
+    color: var(--text); font-family: inherit; font-size: 13px;
+    outline: none; width: 260px; letter-spacing: 0.1em;
+  }
+  .engrave-input:focus { border-color: var(--brass); }
+
+  @media (max-width: 800px) {
+    .flacon-selector { grid-template-columns: 1fr; }
+  }
+
+  /* CTA Band */
+  .bp-ctaband {
+    text-align: center; padding: 20vh 6vw;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(156, 50, 74, 0.14), transparent 70%);
+  }
+  .bp-ctaband h2 { font-size: clamp(34px, 5vw, 68px); max-width: 18ch; margin: 0 auto 16px; }
+  .bp-ctaband p.lead { margin: 0 auto 28px; text-align: center; }
+
+  /* Footer */
+  footer.bp-footer {
+    border-top: 1px solid var(--border-dim);
+    padding: 10vh 6vw 6vh;
+    background: #030303;
+  }
+  .bp-footer .cols {
+    display: grid; grid-template-columns: 2.2fr repeat(3, 1fr); gap: 5vw;
+    max-width: 1400px; margin: 0 auto;
+  }
+  .bp-footer .brand-col .mark {
+    font-family: "Cinzel", serif;
+    letter-spacing: 0.35em; font-size: 15px; color: var(--brass-bright);
+    text-transform: uppercase; font-weight: 600;
+  }
+  .bp-footer .brand-col p {
+    color: var(--text-dim); font-size: 13px; line-height: 1.7; margin-top: 14px; max-width: 32ch;
+  }
+  .bp-footer h4 {
+    font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--brass); margin-bottom: 18px; font-weight: 600;
+  }
+  .bp-footer a {
+    display: block; color: var(--text-dim); text-decoration: none;
+    font-size: 13px; margin-bottom: 10px; transition: color 0.2s;
+  }
+  .bp-footer a:hover { color: var(--brass-bright); }
+  .bp-footer .fine {
+    margin-top: 8vh; padding-top: 4vh; border-top: 1px solid rgba(255, 255, 255, 0.04);
+    text-align: center; font-size: 11px; letter-spacing: 0.2em;
+    color: rgba(247, 243, 236, 0.35); text-transform: uppercase;
+  }
+  @media (max-width: 800px) {
+    .bp-footer .cols { grid-template-columns: 1fr 1fr; gap: 8vw; }
+  }
+
+  /* ── Mobile Nav Responsiveness ── */
+  @media (max-width: 900px) {
+    #brandnav { padding: 12px 4vw; }
+    #brandnav .links {
+      gap: 12px; overflow-x: auto; max-width: 68vw; padding-bottom: 2px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    #brandnav .links::-webkit-scrollbar { display: none; }
+    #brandnav a { font-size: 10px; white-space: nowrap; flex-shrink: 0; }
+  }
+
+  /* ── Acquisition Modal Overlay ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(5, 5, 5, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  .modal-overlay.open {
+    opacity: 1; pointer-events: auto;
+  }
+  .modal-card {
+    background: var(--bg-card);
+    border: 1px solid var(--brass);
+    border-radius: 16px;
+    padding: 40px 36px;
+    max-width: 520px; width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px var(--brass-glow);
+    position: relative;
+    transform: translateY(20px) scale(0.96);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .modal-overlay.open .modal-card {
+    transform: translateY(0) scale(1);
+  }
+  .modal-close {
+    position: absolute; top: 16px; right: 20px;
+    background: none; border: none; color: var(--text-dim);
+    font-size: 24px; cursor: pointer; transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--brass-bright); }
+</style>
+</head>
+<body>
+
+<div class="film-grain"></div>
+
+<!-- ── LOADER ── -->
+<div id="loader">
+  <div class="mark">Oudh & Rose</div>
+  <div class="sub">Artisanal Hydro-Distilled Attar</div>
+  <div class="bar"><i id="loadbar"></i></div>
+</div>
+
+<!-- ── FLOATING AUDIO TOGGLE ── -->
+<div class="top-sound-ctrl">
+  <button id="audio-toggle" class="sound-btn" aria-pressed="false" title="Toggle Procedural Atelier Ambiance">
+    <div class="wave-icon">
+      <span></span><span></span><span></span>
+    </div>
+    <span class="sound-label">Ambiance: OFF</span>
+  </button>
+</div>
+
+<!-- ── VERTICAL CHAPTER SCRUBBER HUD ── -->
+<div id="chapter-hud">
+  <div class="hud-rail">
+    <div class="hud-rail-progress" id="hud-progress-bar"></div>
+  </div>
+  <div class="hud-dot active" data-target="0.00" data-next="0.22"><span class="hud-label">01. Essence</span></div>
+  <div class="hud-dot" data-target="0.22" data-next="0.34"><span class="hud-label">02. Harvest</span></div>
+  <div class="hud-dot" data-target="0.34" data-next="0.45"><span class="hud-label">03. Distillation</span></div>
+  <div class="hud-dot" data-target="0.45" data-next="0.56"><span class="hud-label">04. Condensation</span></div>
+  <div class="hud-dot" data-target="0.56" data-next="0.67"><span class="hud-label">05. Maturation</span></div>
+  <div class="hud-dot" data-target="0.67" data-next="0.78"><span class="hud-label">06. Undiluted</span></div>
+  <div class="hud-dot" data-target="0.78" data-next="0.89"><span class="hud-label">07. The Ritual</span></div>
+  <div class="hud-dot" data-target="0.89" data-next="1.00"><span class="hud-label">08. Flacon</span></div>
+</div>
+
+<!-- ── STICKY NAV ── -->
+<nav id="brandnav">
+  <span class="mark">Oudh & Rose</span>
+  <div class="links">
+    <a href="#how-its-made">The Process</a>
+    <a href="#pyramid">Scent Notes</a>
+    <a href="#comparison">Attar vs Spray</a>
+    <a href="#craft">The Craft</a>
+    <a href="#specs">Specifications</a>
+    <a href="#gallery">Gallery</a>
+    <a class="navcta" href="#acquire">Acquire Flacon</a>
+  </div>
+</nav>
+
+<!-- ── SCROLL FILM STAGE ── -->
+<div id="track">
+  <div id="stage">
+    <canvas id="film"></canvas>
+    <div id="vignette"></div>
+
+    <!-- Chapter 1: Cold Open -->
+    <div class="caption cap-center" data-in="-0.05" data-hold="0.08" data-out="0.19">
+      <div class="step-tag">Pure Botanical Essence</div>
+      <h1>OUDH & <span class="brass">ROSE</span></h1>
+      <p>Attar is a natural perfume oil, made the old way: no alcohol, no shortcuts.</p>
+    </div>
+
+    <!-- Chapter 2: Ingredients Assemble -->
+    <div class="caption cap-left" data-in="0.22" data-hold="0.28" data-out="0.335">
+      <div class="step-tag">Step 01 · Raw Harvest</div>
+      <h2>Harvested at Dawn.<br><span class="brass">Aged in Solitude.</span></h2>
+      <p>Fresh Damask rose petals picked before sunrise before fragile aroma oils evaporate, paired with aged Assam agarwood chips and rare Mysore sandalwood.</p>
+    </div>
+
+    <!-- Chapter 3: Copper Still / Distillation -->
+    <div class="caption cap-right" data-in="0.34" data-hold="0.395" data-out="0.445">
+      <div class="step-tag">Step 02 · Hydro-Distillation</div>
+      <h2>Simmered in Copper.<br><span class="brass">Carried by Steam.</span></h2>
+      <p>Botanicals simmer in water inside sealed wood-fired copper vessels (degs). Fragrant steam rises through the curved bamboo chonga pipe.</p>
+    </div>
+
+    <!-- Chapter 4: Oil Forms / Condensation -->
+    <div class="caption cap-left" data-in="0.45" data-hold="0.505" data-out="0.555">
+      <div class="step-tag">Step 03 · Cold Condensation</div>
+      <h2>Cooled in Still Water.<br><span class="brass">Collected Drop by Drop.</span></h2>
+      <p>Steam cools inside receiving vessels submerged in cold water tanks, naturally separating into floral hydrosol and essential oil, collected drop by drop.</p>
+    </div>
+
+    <!-- Chapter 5: Vial Fills / Maturation -->
+    <div class="caption cap-right" data-in="0.56" data-hold="0.615" data-out="0.665">
+      <div class="step-tag">Step 04 · Maturation & Pouring</div>
+      <h2>Aged for 12 Months.<br><span class="brass">Poured Undiluted.</span></h2>
+      <p>The fresh distillate rests for a full year in leather and glass vessels so volatile top notes harmonize into deep, enduring base accords.</p>
+    </div>
+
+    <!-- Chapter 6: Macro Texture / The Difference -->
+    <div class="caption cap-left" data-in="0.67" data-hold="0.725" data-out="0.775">
+      <div class="step-tag">The Difference · Undiluted Oil</div>
+      <h2>Zero Alcohol.<br><span class="brass">Dab, Never Spray.</span></h2>
+      <p>100% concentrated botanical oil with no water or synthetic fixatives. A single dab to the pulse points lasts on the skin for over 24 hours.</p>
+    </div>
+
+    <!-- Chapter 7: Smoke & Incense Ritual -->
+    <div class="caption cap-right" data-in="0.78" data-hold="0.835" data-out="0.885">
+      <div class="step-tag">The Ritual · Living Aura</div>
+      <h2>Warmed by Skin.<br><span class="brass">A Personal Tradition.</span></h2>
+      <p>Attar reacts with your individual body temperature, evolving slowly throughout the day rather than evaporating into the room.</p>
+    </div>
+
+    <!-- Chapter 8: Closing Hero -->
+    <div class="caption cap-bottom" data-in="0.89" data-hold="0.95" data-out="1.10">
+      <h1>OUDH & <span class="brass">ROSE</span></h1>
+      <p>From petal to still to vial — nothing added, nothing rushed.</p>
+      <a class="cta-btn" href="#how-its-made">Explore How It's Made ↓</a>
+    </div>
+
+    <div id="scroll-cue">Scroll to Explore</div>
+  </div>
+</div>
+
+<!-- ── FULL BRAND HOMEPAGE ── -->
+
+<!-- Section 1: Manifesto -->
+<section class="bp bp-manifesto" id="manifesto">
+  <div data-reveal>
+    <p class="kicker">The Manifesto</p>
+    <h2>Purity is not an ingredient. It is a refusal to rush.</h2>
+    <p class="lead">In an industry dominated by synthetic aerosols and 80% alcohol dilution, OUDH & ROSE preserves the ancient art of genuine attar: pure botanical hydro-distillation that honors the seasons, the wood, and the flame.</p>
+  </div>
+</section>
+
+<!-- Section 2: Complete "How It's Made" Section -->
+<section class="bp" id="how-its-made">
+  <div data-reveal>
+    <p class="kicker">The Process Explained</p>
+    <h2>How Real Attar Is Made: Step by Step</h2>
+    <p class="lead">Every flacon requires weeks of artisan labor and months of quiet cellar aging. Here is the complete journey from wild botanicals to the pure scented oil on your skin.</p>
+  </div>
+
+  <div class="process-grid">
+    <div class="process-card" data-reveal>
+      <div class="step-num">01</div>
+      <h3>The Dawn Harvest</h3>
+      <p>Damask rose petals (<em>Rosa Damascena</em>) are harvested strictly by hand between 4:00 AM and 6:00 AM before the sun's heat evaporates the fragile monoterpene essential oils.</p>
+      <div class="tag-row">
+        <span>Time: Pre-dawn</span>
+        <span>Origin: Organic Rose Fields</span>
+      </div>
+    </div>
+
+    <div class="process-card" data-reveal>
+      <div class="step-num">02</div>
+      <h3>Copper Hydro-Distillation</h3>
+      <p>Petals and wild Assam oud wood chips are loaded into heavy copper cauldrons (<em>Degs</em>) with pure spring water. The lid is sealed hermetically using a traditional paste of clay, mud, and cotton fiber.</p>
+      <div class="tag-row">
+        <span>Vessel: Wood-Fired Deg</span>
+        <span>Seal: Clay Sarposh</span>
+      </div>
+    </div>
+
+    <div class="process-card" data-reveal>
+      <div class="step-num">03</div>
+      <h3>Vapor Conduit (Chonga)</h3>
+      <p>A gentle wood fire slowly heats the deg. Fragrant steam carrying botanical aromatic molecules travels upward through a curved, hand-wrapped bamboo pipe (<em>Chonga</em>) into subterranean receiver vessels.</p>
+      <div class="tag-row">
+        <span>Conduit: Hollow Bamboo</span>
+        <span>Pressure: Low, Natural</span>
+      </div>
+    </div>
+
+    <div class="process-card" data-reveal>
+      <div class="step-num">04</div>
+      <h3>Cold-Water Condensation</h3>
+      <p>The copper receiver vessel (<em>Bhapka</em>) rests submerged in a tank of circulating cold spring water. As the hot botanical steam enters the cooled copper, it instantly condenses into liquid droplets.</p>
+      <div class="tag-row">
+        <span>Receiver: Submerged Bhapka</span>
+        <span>Cooling: Natural Spring Water</span>
+      </div>
+    </div>
+
+    <div class="process-card" data-reveal>
+      <div class="step-num">05</div>
+      <h3>Phase Separation</h3>
+      <p>Because aromatic botanical oil is lighter than water, pure attar naturally rises to the surface. The master distiller separates the essential oil from the floral hydrosol drop by drop by hand.</p>
+      <div class="tag-row">
+        <span>Purity: 100% Oil Extract</span>
+        <span>Alcohol: 0.0%</span>
+      </div>
+    </div>
+
+    <div class="process-card" data-reveal>
+      <div class="step-num">06</div>
+      <h3>12-Month Micro-Aging</h3>
+      <p>Fresh distillate is transferred into traditional porous camel-skin bottles (<em>Kuppi</em>) and optical glass demijohns. Micro-porosity allows residual water to breathe out while the scent rounds out into deep, velvety complexity.</p>
+      <div class="tag-row">
+        <span>Aging: 365 Days</span>
+        <span>Container: Porous Kuppi</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3: Olfactory Pyramid -->
+<section class="bp" id="pyramid">
+  <div data-reveal style="text-align:center;">
+    <p class="kicker">Scent Architecture</p>
+    <h2>The Olfactory Evolution</h2>
+    <p class="lead" style="margin: 0 auto;">Unlike alcohol perfumes that evaporate quickly, natural attar unfolds in distinct molecular tiers over 24 hours on your skin.</p>
+  </div>
+
+  <div class="notes-pyramid">
+    <div class="accord-card" data-reveal>
+      <div class="accord-header">
+        <h4>Top Accord</h4>
+        <div class="timeframe">First 30 Minutes</div>
+      </div>
+      <div>
+        <p style="font-size:14px; color:var(--text-dim);">Luminous, dewy floral opening with delicate crisp green undertones that bloom instantly upon contact with skin.</p>
+        <div class="accord-pills">
+          <span class="accord-pill">Damask Rose Petals</span>
+          <span class="accord-pill">Morning Green Dew</span>
+          <span class="accord-pill">Kashmiri Saffron</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accord-card" data-reveal>
+      <div class="accord-header">
+        <h4>Heart Accord</h4>
+        <div class="timeframe">2 to 6 Hours</div>
+      </div>
+      <div>
+        <p style="font-size:14px; color:var(--text-dim);">Rich, resinous core where deep aged agarwood melds with warm velvet rose and balsamic amber tears.</p>
+        <div class="accord-pills">
+          <span class="accord-pill">Assam Black Oud</span>
+          <span class="accord-pill">Smoked Labdanum</span>
+          <span class="accord-pill">Caramelized Benzoin</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="accord-card" data-reveal>
+      <div class="accord-header">
+        <h4>Base Accord</h4>
+        <div class="timeframe">6 to 24+ Hours</div>
+      </div>
+      <div>
+        <p style="font-size:14px; color:var(--text-dim);">A warm, intimate skin-scent that lingers through friction and body temperature, lasting into the next morning.</p>
+        <div class="accord-pills">
+          <span class="accord-pill">Mysore Sandalwood</span>
+          <span class="accord-pill">Omani Frankincense</span>
+          <span class="accord-pill">Warm Skin Musk</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 4: Attar vs Spray Comparison -->
+<section class="bp" id="comparison">
+  <div data-reveal style="text-align:center;">
+    <p class="kicker">Why Pure Oil?</p>
+    <h2>Attar vs. Commercial Spray Perfume</h2>
+    <p class="lead" style="margin: 0 auto;">Understanding the fundamental chemical and sensory differences between concentrated oil and alcohol aerosols.</p>
+  </div>
+
+  <table class="comp-table" data-reveal>
+    <thead>
+      <tr>
+        <th>Attribute</th>
+        <th class="highlight">OUDH & ROSE Natural Attar</th>
+        <th>Commercial Eau de Parfum</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Formulation Base</strong></td>
+        <td class="highlight">100% Pure Sandalwood & Botanical Oil</td>
+        <td>80%–90% Denatured Alcohol & Distilled Water</td>
+      </tr>
+      <tr>
+        <td><strong>Skin Interaction</strong></td>
+        <td class="highlight">Warmed by skin friction; adapts to body chemistry</td>
+        <td>Rapid chemical evaporation; volatile top notes dissipate</td>
+      </tr>
+      <tr>
+        <td><strong>Skin Longevity</strong></td>
+        <td class="highlight"><strong>24+ Hours</strong> (Deep botanical fixative)</td>
+        <td>2 to 4 Hours (Requires repeated resprays)</td>
+      </tr>
+      <tr>
+        <td><strong>Sillage & Presence</strong></td>
+        <td class="highlight">Intimate personal aura (Whispers close to skin)</td>
+        <td>Aerosol cloud that overwhelms the room then fades</td>
+      </tr>
+      <tr>
+        <td><strong>Aging Quality</strong></td>
+        <td class="highlight">Improves & deepens over years like vintage wine</td>
+        <td>Degrades & oxidizes within 12–24 months</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- Section 5: Craft Deep Dives -->
+<section class="bp" id="craft">
+  <div class="bp-split">
+    <div data-reveal>
+      <p class="kicker">The Craft — 01</p>
+      <h2>The Hand-Hammered Copper Deg</h2>
+      <p class="lead">Why copper? Copper distributes thermal energy evenly and gently across the entire cauldron, preventing the delicate rose petals from scorching. It chemically neutralizes sulfur compounds, resulting in an unclouded, luminous floral vapor.</p>
+    </div>
+    <div class="img-box" data-reveal>
+      <img src="images/copper_still.webp" alt="Hand-hammered copper distillation still" />
+    </div>
+  </div>
+</section>
+
+<section class="bp">
+  <div class="bp-split flip">
+    <div data-reveal>
+      <p class="kicker">The Craft — 02</p>
+      <h2>Wild Assam Oud & Sandalwood Base</h2>
+      <p class="lead">Commercial perfumes use petrochemical alcohol that shocks the olfactory senses and dissipates rapidly. We distill our rose essence directly over pure aged Mysore sandalwood and Assam agarwood resin, creating a living, skin-warmed fixative that endures for 24+ hours.</p>
+    </div>
+    <div class="img-box" data-reveal>
+      <img src="images/ingredients.webp" alt="Raw rose petals, aged oud chips, and sandalwood" />
+    </div>
+  </div>
+</section>
+
+<!-- Section 6: Numbers Strip -->
+<section class="bp">
+  <div class="bp-stats" data-reveal>
+    <div>
+      <div class="num">100%</div>
+      <div class="lbl">Pure Botanical Oil</div>
+    </div>
+    <div>
+      <div class="num">10,000</div>
+      <div class="lbl">Petals Per Flacon</div>
+    </div>
+    <div>
+      <div class="num">365</div>
+      <div class="lbl">Days Cellar Aging</div>
+    </div>
+    <div>
+      <div class="num">24+ hrs</div>
+      <div class="lbl">Skin Longevity</div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 7: Technical Specifications -->
+<section class="bp bp-specs" id="specs">
+  <div data-reveal>
+    <p class="kicker" style="text-align:center">Technical Specifications</p>
+    <h2 style="text-align:center; margin-bottom: 30px;">Pure Attar Architecture</h2>
+    <table>
+      <tr>
+        <td>Botanical Classification</td>
+        <td>Rosa Damascena & Aquilaria Agallocha</td>
+      </tr>
+      <tr>
+        <td>Extraction Method</td>
+        <td>Traditional Hydro-Distillation (Deg & Bhapka)</td>
+      </tr>
+      <tr>
+        <td>Fixative Base</td>
+        <td>100% Pure Santalum Album (Mysore Sandalwood)</td>
+      </tr>
+      <tr>
+        <td>Solvent & Alcohol Content</td>
+        <td>0.00% (Undiluted Extrait d'Attar)</td>
+      </tr>
+      <tr>
+        <td>Aging Protocol</td>
+        <td>12 Months in Traditional Leather & Optical Glass</td>
+      </tr>
+      <tr>
+        <td>Application Ritual</td>
+        <td>Glass Dauber dabbed on Pulse Points (Friction-Activated)</td>
+      </tr>
+      <tr>
+        <td>Flacon Capacity</td>
+        <td>3ml / 6ml / 12ml Hand-Cut Optical Crystal</td>
+      </tr>
+      <tr>
+        <td>Shelf Life</td>
+        <td>Indefinite (Aromas deepen and improve with decanting age)</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- Section 8: Pull Quote -->
+<section class="bp bp-quote">
+  <div data-reveal>
+    <blockquote>"Spray perfume announces itself to the whole room and vanishes in two hours. A true attar stays close to your skin and whispers all night."</blockquote>
+    <cite>— House Master Distiller</cite>
+  </div>
+</section>
+
+<!-- Section 9: Gallery -->
+<section class="bp" id="gallery">
+  <div data-reveal>
+    <p class="kicker">Visual Archive</p>
+    <h2>From Garden to Flacon</h2>
+    <p class="lead">A behind-the-scenes look at the stills, the botanicals, and the hand-crafted vessels of the Oudh & Rose atelier.</p>
+  </div>
+
+  <div class="bp-gallery">
+    <div class="img-wrap g1" data-reveal>
+      <img src="images/ingredients.webp" alt="Ingredients assortment" />
+    </div>
+    <div class="img-wrap g2" data-reveal>
+      <img src="images/copper_still.webp" alt="Copper distillation vessel" />
+    </div>
+    <div class="img-wrap g3" data-reveal>
+      <img src="images/vial_empty.webp" alt="Crystal flacon before pouring" />
+    </div>
+    <div class="img-wrap g4" data-reveal>
+      <img src="images/hero_vial.webp" alt="Filled attar flacon with golden oil" />
+    </div>
+  </div>
+</section>
+
+<!-- Section 10: Interactive Acquisition Section -->
+<section class="bp bp-ctaband" id="acquire">
+  <div data-reveal>
+    <p class="kicker">Small-Batch Harvest</p>
+    <h2>Acquire Your Numbered Flacon</h2>
+    <p class="lead">Distilled from the 2026 spring harvest. Select your volume and personalize with complimentary hand-engraved crystal monogramming.</p>
+    
+    <div class="flacon-selector">
+      <div class="flacon-card selected" onclick="selectFlacon(this, 185, '3ml')">
+        <div class="size-tag">3ml</div>
+        <div class="price">$185</div>
+        <div class="desc">Pocket Crystal Flacon with precision glass dauber. Approx. 60 daily applications.</div>
+      </div>
+      <div class="flacon-card" onclick="selectFlacon(this, 320, '6ml')">
+        <div class="size-tag">6ml</div>
+        <div class="price">$320</div>
+        <div class="desc">Atelier Crystal Flacon encased in handcrafted velvet coffret with brass accents.</div>
+      </div>
+      <div class="flacon-card" onclick="selectFlacon(this, 560, '12ml')">
+        <div class="size-tag">12ml</div>
+        <div class="price">$560</div>
+        <div class="desc">Master Collector's Crystal Decanter. Numbered seal with brass dipstick dauber.</div>
+      </div>
+    </div>
+
+    <div class="engrave-box">
+      <input type="text" class="engrave-input" maxlength="3" placeholder="Monogram Initials (e.g. O&R)" oninput="updateEngraving(this.value)">
+    </div>
+
+    <a class="cta-btn" id="buy-cta" href="#" style="margin-top:28px;">Acquire 3ml Flacon — $185</a>
+  </div>
+</section>
+
+<!-- Section 11: Real Footer -->
+<footer class="bp-footer">
+  <div class="cols">
+    <div class="brand-col">
+      <span class="mark">Oudh & Rose</span>
+      <p>Artisanal natural attar house. Dedicated to authentic hydro-distillation in copper degs with zero alcohol, zero shortcuts.</p>
+    </div>
+    <div>
+      <h4>Navigation</h4>
+      <a href="#how-its-made">The Process</a>
+      <a href="#pyramid">Scent Notes</a>
+      <a href="#comparison">Attar vs Spray</a>
+      <a href="#specs">Specifications</a>
+    </div>
+    <div>
+      <h4>The Atelier</h4>
+      <a href="#">Distillation Journal</a>
+      <a href="#">Assam Oud Source</a>
+      <a href="#">Kannauj Heritage</a>
+      <a href="#">Private Reserve</a>
+    </div>
+    <div>
+      <h4>Customer Care</h4>
+      <a href="#">Application Ritual</a>
+      <a href="#">Flacon Care</a>
+      <a href="#">Worldwide Shipping</a>
+      <a href="#">Contact Atelier</a>
+    </div>
+  </div>
+  <p class="fine">© 2026 OUDH & ROSE ATELIER. ALL RIGHTS RESERVED. HAND-DISTILLED TRADITIONAL NATURAL PERFUMERY.</p>
+</footer>
+
+<!-- ── ACQUISITION CONFIRMATION MODAL ── -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <div style="font-size: 11px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--brass); margin-bottom: 12px;">Order Allocation</div>
+    <h3 style="font-size: 26px; margin-bottom: 12px;" class="brand-font">Flacon Reserved</h3>
+    <p style="font-size: 14px; color: var(--text-dim); line-height: 1.6; margin-bottom: 24px;" id="modal-desc">
+      Your 3ml Flacon has been reserved from the 2026 Spring Harvest.
+    </p>
+    <div style="background: rgba(212, 163, 89, 0.08); border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 24px; font-size: 13px; text-align: left;">
+      <div style="display:flex; justify-content:space-between; margin-bottom: 10px;">
+        <span style="color:var(--text-dim)">Selected Edition:</span>
+        <strong style="color:var(--brass-bright)" id="summary-size">3ml Crystal Flacon</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-bottom: 10px;">
+        <span style="color:var(--text-dim)">Custom Monogram:</span>
+        <strong style="color:var(--brass-bright)" id="summary-engrave">None (Pure Flacon)</strong>
+      </div>
+      <div style="display:flex; justify-content:space-between; border-top: 1px solid var(--border-dim); padding-top: 10px; font-size: 15px;">
+        <span style="color:var(--text)">Total Allocation Price:</span>
+        <strong style="color:var(--brass-bright)" id="summary-price">$185 USD</strong>
+      </div>
+    </div>
+    <button class="cta-btn" style="width: 100%; margin-top: 0; cursor: pointer;" onclick="completeReservation()">Proceed to Secure Checkout →</button>
+  </div>
+</div>
+
+<!-- ── SCRIPTS ── -->
+<script src="main.js"></script>
+<script>
+  // Initialize Lenis Smooth Scroll
+  let lenis;
+  if (typeof Lenis !== "undefined") {
+    lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 2.0,
+      infinite: false,
+    });
+
+    window.lenis = lenis;
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+  }
+
+  // Smooth Scroll for all internal anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const targetId = this.getAttribute('href');
+      if (!targetId || targetId === '#') return;
+      const targetEl = document.querySelector(targetId);
+      if (targetEl) {
+        e.preventDefault();
+        if (window.lenis) {
+          window.lenis.scrollTo(targetEl, { duration: 1.2, offset: -20 });
+        } else {
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  });
+
+  // Reveal animations on scroll + sticky nav trigger
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) e.target.classList.add("in");
+      });
+    },
+    { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+  );
+
+  document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
+
+  const revealNow = () => {
+    document.querySelectorAll("[data-reveal]:not(.in)").forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.92 && r.bottom > 0) {
+        el.classList.add("in");
+      }
+    });
+  };
+
+  window.addEventListener("scroll", revealNow, { passive: true });
+  revealNow();
+
+  const nav = document.getElementById("brandnav");
+  const filmTrack = document.getElementById("track");
+  const updateNav = () => {
+    const filmEnd = (filmTrack ? filmTrack.offsetHeight : window.innerHeight * 9) - window.innerHeight;
+    if (window.scrollY > filmEnd * 0.94) {
+      nav.classList.add("on");
+    } else {
+      nav.classList.remove("on");
+    }
+  };
+
+  window.addEventListener("scroll", updateNav, { passive: true });
+  updateNav();
+
+  // Flacon selection handler
+  let selectedSize = "3ml";
+  let selectedPrice = 185;
+  let monogram = "";
+
+  function selectFlacon(el, price, size) {
+    document.querySelectorAll(".flacon-card").forEach(c => c.classList.remove("selected"));
+    el.classList.add("selected");
+    selectedSize = size;
+    selectedPrice = price;
+    updateCtaText();
+  }
+
+  function updateEngraving(val) {
+    monogram = val.trim().toUpperCase();
+    updateCtaText();
+  }
+
+  function updateCtaText() {
+    const btn = document.getElementById("buy-cta");
+    if (!btn) return;
+    const engraveNote = monogram ? ` [Engraved: ${monogram}]` : "";
+    btn.textContent = `Acquire ${selectedSize} Flacon — $${selectedPrice}${engraveNote}`;
+  }
+
+  // Acquisition Modal logic
+  const buyCta = document.getElementById("buy-cta");
+  if (buyCta) {
+    buyCta.addEventListener("click", (e) => {
+      e.preventDefault();
+      openModal();
+    });
+  }
+
+  function openModal() {
+    const modal = document.getElementById("checkout-modal");
+    document.getElementById("summary-size").textContent = `${selectedSize} Crystal Flacon`;
+    document.getElementById("summary-engrave").textContent = monogram ? monogram : "None (Pure Flacon)";
+    document.getElementById("summary-price").textContent = `$${selectedPrice} USD`;
+    document.getElementById("modal-desc").textContent = `Your ${selectedSize} Flacon from the 2026 Spring Harvest has been allocated${monogram ? ' with custom monogram engraving [' + monogram + ']' : ''}.`;
+    if (modal) modal.classList.add("open");
+  }
+
+  function closeModal() {
+    const modal = document.getElementById("checkout-modal");
+    if (modal) modal.classList.remove("open");
+  }
+
+  function completeReservation() {
+    alert("Thank you! Your allocation request has been reserved. Our atelier concierges will contact you directly.");
+    closeModal();
+  }
+</script>
+</body>
+</html>

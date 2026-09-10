@@ -1,0 +1,26 @@
+# Version Control & IDE
+.git
+.gitignore
+.gemini
+.agents
+.vscode
+.idea
+
+# Environment & Secret Files
+.env
+.env.*
+
+# Python Scripts & Processing Artifacts
+scripts/
+raw/
+references/
+__pycache__/
+*.py
+*.pyc
+
+# Docs & Skill guides (not needed at runtime)
+SKILL.md
+
+# OS specific files
+.DS_Store
+Thumbs.db

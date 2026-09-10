@@ -1,0 +1,20 @@
+# Environment & Secret Files (Never commit)
+.env
+.env.*
+*.key
+*.pem
+*.secret
+credentials.json
+
+# System & OS Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# IDE & Tool configs
+.vscode/
+.idea/
+.gemini/
+.agents/
+__pycache__/
+*.pyc

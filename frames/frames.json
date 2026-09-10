@@ -1,0 +1,80 @@
+{
+  "count": 391,
+  "pattern": "frames/frame_%04d.webp",
+  "fps": 12,
+  "duration": 32.583333333333336,
+  "chapters": [
+    {
+      "name": "ch1_open",
+      "start_frame": 0,
+      "duration_frames": 96,
+      "title": "Natural Perfume Oil",
+      "caption": "Attar is a natural perfume oil, made the old way: no alcohol, no shortcuts.",
+      "start_fraction": 0.0,
+      "end_fraction": 0.246
+    },
+    {
+      "name": "ch2_ingredients",
+      "start_frame": 91,
+      "duration_frames": 48,
+      "title": "Raw Botanicals",
+      "caption": "Hand-picked Damask rose petals harvested at dawn, paired with aged Assam oud wood and rare Mysore sandalwood.",
+      "start_fraction": 0.233,
+      "end_fraction": 0.356
+    },
+    {
+      "name": "ch3_distillation",
+      "start_frame": 134,
+      "duration_frames": 48,
+      "title": "Hydro-Distillation",
+      "caption": "Botanicals and pure mountain water simmer inside sealed copper degs. Fragrant steam rises through bamboo chonga pipes.",
+      "start_fraction": 0.344,
+      "end_fraction": 0.467
+    },
+    {
+      "name": "ch4_condensation",
+      "start_frame": 177,
+      "duration_frames": 48,
+      "title": "Cold Condensation",
+      "caption": "Steam cools in underwater copper receivers, separating into floral water and pure aromatic oil, collected drop by drop.",
+      "start_fraction": 0.454,
+      "end_fraction": 0.577
+    },
+    {
+      "name": "ch5_vial_fills",
+      "start_frame": 220,
+      "duration_frames": 48,
+      "title": "Maturation & Pouring",
+      "caption": "Aged for twelve months in camel-skin vessels so volatile top notes harmonize into deep, enduring base accords.",
+      "start_fraction": 0.564,
+      "end_fraction": 0.687
+    },
+    {
+      "name": "ch6_macro_texture",
+      "start_frame": 263,
+      "duration_frames": 48,
+      "title": "Undiluted Pure Oil",
+      "caption": "100% pure essence without synthetic fixatives. A single dab warms to your skin chemistry and radiates for 24+ hours.",
+      "start_fraction": 0.674,
+      "end_fraction": 0.797
+    },
+    {
+      "name": "ch7_incense_smoke",
+      "start_frame": 306,
+      "duration_frames": 48,
+      "title": "The Ritual",
+      "caption": "Applied to pulse points and warmed with slow friction\u2014a mindful sensory tradition passed down through generations.",
+      "start_fraction": 0.785,
+      "end_fraction": 0.908
+    },
+    {
+      "name": "ch8_closing_hero",
+      "start_frame": 349,
+      "duration_frames": 42,
+      "title": "Oudh & Rose",
+      "caption": "From petal to still to vial \u2014 nothing added, nothing rushed.",
+      "start_fraction": 0.895,
+      "end_fraction": 1.0
+    }
+  ]
+}
